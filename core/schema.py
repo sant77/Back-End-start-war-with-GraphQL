@@ -1,25 +1,28 @@
 import strawberry
-from .type import CharacterType, FilmType, PlanetType
+import strawberry_django
+from strawberry_django.relay import DjangoListConnection
 from .models import Character, Film, Planet
+from .type import CharacterType, FilmType, PlanetType
 from core.mutations import Mutation
+
 
 @strawberry.type
 class Query:
-    Character: list[CharacterType] = strawberry.field(
-        resolver=lambda: Character.objects.all()
-    )
-    @strawberry.field
-    def character_by_name(self, name: str) -> CharacterType | None:
-        try:
-            return Character.objects.get(name__iexact=name)
-        except Character.DoesNotExist:
-            return None
-        
-    films: list[FilmType] = strawberry.field(
-        resolver=lambda: Film.objects.all())
-    
-    planets: list[PlanetType] = strawberry.field(
-        resolver=lambda: Planet.objects.all()
-    )
+
+    # Lista completa de personajes con paginación estándar
+    characters: DjangoListConnection[CharacterType] = strawberry_django.connection()
+
+    # Ejemplo de búsqueda con Relay
+    @strawberry_django.connection(DjangoListConnection[CharacterType])
+    def search_characters(self, name: str | None = None) -> list[Character]:
+        queryset = Character.objects.all()
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset
+
+    # Films y planets también con Relay
+    films: DjangoListConnection[FilmType] = strawberry_django.connection()
+    planets: DjangoListConnection[PlanetType] = strawberry_django.connection()
+
 
 shchema =  strawberry.Schema(query=Query, mutation=Mutation)

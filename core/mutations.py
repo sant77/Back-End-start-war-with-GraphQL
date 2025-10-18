@@ -1,7 +1,7 @@
 import strawberry
 from core.models import Character, Film, Planet
 from core.type import CharacterType, FilmType, PlanetType
-
+import datetime
 @strawberry.type
 class Mutation:
     @strawberry.mutation
@@ -22,7 +22,7 @@ class Mutation:
         height: str = "",
         mass: str = "",
         gender: str = "",
-        films_ids: list[int] = strawberry.UNSET
+        films_ids: list[int] = []
     ) -> CharacterType:
         
         char = Character.objects.create(
@@ -32,7 +32,7 @@ class Mutation:
             gender=gender,
         )
 
-        if films_ids is not strawberry.UNSET:
+        if films_ids:
             films = Film.objects.filter(id__in=films_ids)
             char.films.set(films)
 
@@ -48,20 +48,22 @@ class Mutation:
         producer: str = "",
         release_date: str = "1970-01-01",
         desc: str = "",
-        planets_ids: list[int] = strawberry.UNSET
+        planets_ids: list[int] =[]
     ) -> FilmType:
         
+        release_date_obj = datetime.datetime.strptime(release_date, "%Y-%m-%d").date()
+
         film = Film.objects.create(
             title=title,
             episode_id=episode_id,
             opening_crawl=opening_crawl,
             director=director,
             producer=producer,
-            release_date=release_date,
+            release_date=release_date_obj,
             desc=desc,
         )
 
-        if planets_ids is not strawberry.UNSET:
+        if planets_ids:
             planets = Planet.objects.filter(id__in=planets_ids)
             film.planets.set(planets)
 

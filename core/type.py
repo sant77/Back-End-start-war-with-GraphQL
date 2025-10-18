@@ -1,17 +1,19 @@
 import strawberry_django
-from strawberry import auto
+from strawberry import auto, relay
 from . import models
+import strawberry
 
 @strawberry_django.type(models.Planet)
-class PlanetType:
+class PlanetType(relay.Node):
     id: auto
     name: auto
     climate: auto
     terrain: auto
     population: auto
 
+
 @strawberry_django.type(models.Film)
-class FilmType:
+class FilmType(relay.Node):
     id: auto
     title: auto
     episode_id: auto
@@ -22,8 +24,9 @@ class FilmType:
     desc: auto
     planets: list[PlanetType]
 
+
 @strawberry_django.type(models.Character)
-class CharacterType:
+class CharacterType(relay.Node):
     id: auto
     name: auto
     height: auto
@@ -36,3 +39,14 @@ class CharacterType:
     homeworld: PlanetType
     films: list[FilmType]
     desc: auto
+
+# Integración con Relay para paginación
+@strawberry.type
+class CharacterConnection(relay.Connection[CharacterType]):
+    total_count: int
+
+    @classmethod
+    def resolve_connection(cls, nodes, info, **kwargs) -> "CharacterConnection":
+        connection = super().resolve_connection(nodes, info, **kwargs)
+        connection.total_count = len(nodes) if nodes else models.Character.objects.count()
+        return connection
