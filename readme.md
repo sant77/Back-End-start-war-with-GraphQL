@@ -122,3 +122,10 @@ pytest -v
 ### 8. Acceder a GraphiQL para documentación interactiva:
 
 - http://localhost:8000/graphql/
+
+### Nota si falla el create probablemente se requerra correr esto en las tablas:
+
+```bash
+    SELECT setval('core_planet_id_seq', (SELECT MAX(id) FROM  core_planet cp));
+
+```
