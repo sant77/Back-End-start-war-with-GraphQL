@@ -1,0 +1,174 @@
+{
+	"info": {
+		"_postman_id": "bcaaa04e-51d1-487b-b917-d8e919ec3949",
+		"name": "test_django",
+		"description": "Documentación.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24753436"
+	},
+	"item": [
+		{
+			"name": "Listado de personajes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\r\n  characters {\r\n    edges {\r\n      node {\r\n        id\r\n        name\r\n        films {\r\n          id\r\n          title\r\n        }\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/graphql/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"graphql",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Busqueda filtrada",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query SearchCharacters($name: String) {\r\n  searchCharacters(name: $name) {\r\n    edges {\r\n      node {\r\n        id\r\n        name\r\n        films {\r\n          id\r\n          title\r\n        }\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+						"variables": "{\r\n    \"name\":\"Luke Skywalker\"\r\n}"
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/graphql/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"graphql",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear personaje",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation CreateCharacter($name: String!, $height: String, $mass: String, $gender: String, $filmsIds: [Int!]) {\r\n  createCharacter(name: $name, height: $height, mass: $mass, gender: $gender, filmsIds: $filmsIds) {\r\n    id\r\n    name\r\n    height\r\n    mass\r\n    gender\r\n    films {\r\n      id\r\n      title\r\n    }\r\n  }\r\n}\r\n",
+						"variables": "{\r\n  \"name\": \"Luke Skywalker 2\",\r\n  \"height\": \"172\",\r\n  \"mass\": \"77\",\r\n  \"gender\": \"male\",\r\n  \"filmsIds\": [1]\r\n}\r\n"
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/graphql/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"graphql",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear pelicula",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation CreateFilm($title: String!, $episodeId: Int!, $releaseDate: String!, $planetsIds: [Int!]) {\r\n  createFilm(title: $title, episodeId: $episodeId, releaseDate: $releaseDate, planetsIds: $planetsIds) {\r\n    id\r\n    title\r\n    episodeId\r\n    releaseDate\r\n    planets {\r\n      id\r\n      name\r\n    }\r\n  }\r\n}\r\n",
+						"variables": "{\r\n  \"title\": \"A New Hope\",\r\n  \"episodeId\": 4,\r\n  \"releaseDate\": \"1977-05-25\",\r\n  \"planetsIds\": [1] \r\n}\r\n"
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/graphql/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"graphql",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear planeta",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation CreatePlanet($name: String!, $climate: String, $terrain: String, $population: String) {\r\n  createPlanet(name: $name, climate: $climate, terrain: $terrain, population: $population) {\r\n    id\r\n    name\r\n    climate\r\n    terrain\r\n    population\r\n  }\r\n}\r\n",
+						"variables": "{\r\n  \"name\": \"Tatooine\",\r\n  \"climate\": \"Arid\",\r\n  \"terrain\": \"Desert\",\r\n  \"population\": \"200000\"\r\n}\r\n"
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/graphql/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"graphql",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
