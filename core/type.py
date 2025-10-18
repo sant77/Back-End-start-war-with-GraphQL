@@ -1,6 +1,6 @@
 import strawberry_django
-from strawberry_django import auto
-import models
+from strawberry import auto
+from . import models
 
 @strawberry_django.type(models.Planet)
 class PlanetType:

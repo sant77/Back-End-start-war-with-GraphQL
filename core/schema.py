@@ -1,6 +1,6 @@
 import strawberry
-from types import CharacterType, FilmType, PlanetType
-from models import Character, Film, Planet
+from .type import CharacterType, FilmType, PlanetType
+from .models import Character, Film, Planet
 
 @strawberry.type
 class Query:
